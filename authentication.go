@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (c *client) TokenRequest(ctx context.Context) (*TokenRequestResponse, error) {
+func (c *client) TokenRequest(ctx context.Context) (*TokenResponse, error) {
 
 	req := &TokenRequestRequest{
 		GrantType:    "client_credentials",
@@ -36,15 +36,17 @@ func (c *client) TokenRequest(ctx context.Context) (*TokenRequestResponse, error
 		return nil, err
 	}
 
-	var response TokenRequestResponse
+	var response TokenResponse
 	if err := json.Unmarshal(responseBody, &response); err != nil {
 		return nil, err
 	}
 
+	c.tokenResponse = &response
+
 	return &response, nil
 }
 
-func (c *client) TokenRefresh(ctx context.Context) (*TokenRefreshResponse, error) {
+func (c *client) TokenRefresh(ctx context.Context) (*TokenResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }

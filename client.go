@@ -13,6 +13,8 @@ import (
 type client struct {
 	config  *Config
 	backend *Backend
+
+	tokenResponse *TokenResponse
 }
 
 func (c *client) doRequest(ctx context.Context, path string, method string,
