@@ -14,7 +14,9 @@ func main() {
 		SecretID: os.Getenv("SECRET_ID"),
 	})
 
-	rsp, err := c.TokenRequest(context.Background())
+	ctx := context.WithValue(context.Background(), neonomics.CtxKeyDeviceID, "111111")
+
+	rsp, err := c.GetSupportedBanks(ctx)
 	if err != nil {
 		panic(err)
 	}
