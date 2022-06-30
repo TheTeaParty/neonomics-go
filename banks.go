@@ -39,5 +39,33 @@ func (c *client) GetSupportedBanks(ctx context.Context) ([]*GetSupportedBanksRes
 }
 
 func (c *client) GetSupportedBankByID(ctx context.Context, ID string) (*GetSupportedBanksResponse, error) {
-	return nil, nil
+	_, err := c.TokenRequest(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	deviceID, ok := ctx.Value(CtxKeyDeviceID).(string)
+	if !ok {
+		return nil, ErrMissingCtxKey
+	}
+
+	headers := map[string]string{
+		CtxKeyDeviceID:  deviceID,
+		"accept":        "application/json",
+		"authorization": fmt.Sprintf("Bearer %s", c.tokenResponse.AccessToken),
+	}
+
+	reqURL := fmt.Sprintf(string(PathGetSupportedBankByID), ID)
+
+	responseBody, err := c.doRequest(ctx, reqURL, http.MethodGet, headers, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response *GetSupportedBanksResponse
+	if err := json.Unmarshal(responseBody, &response); err != nil {
+		return nil, err
+	}
+
+	return response, err
 }
