@@ -5,6 +5,54 @@ import (
 	"time"
 )
 
+type Path string
+
+const (
+	PathTokenRequest             Path = "/auth/realms/live/protocol/openid-connect/token"
+	PathTokenRefresh             Path = "/auth/realms/live/protocol/openid-connect/token"
+	PathGetSupportedBanks        Path = "/ics/v3/banks"
+	PathGetSupportedBankByID     Path = "/ics/v3/banks/%s"
+	PathCreateSession            Path = "/ics/v3/session"
+	PathGetSessionStatus         Path = "/ics/v3/session/%s"
+	PathDeleteSession            Path = "/ics/v3/session/%s"
+	PathGetConsent               Path = "/ics/v3/consent/%s"
+	PathGetAccounts              Path = "/ics/v3/accounts"
+	PathGetAccountByID           Path = "/ics/v3/accounts/%s"
+	PathGetBalancesByID          Path = "/ics/v3/accounts/%s/balances"
+	PathGetTransactionsByID      Path = "/ics/v3/accounts/%s/transactions"
+	PathDomesticPayment          Path = "/ics/v3/payments/domestic-transfer"
+	PathDomesticScheduledPayment Path = "/ics/v3/payments/domestic-scheduled-transfer"
+	PathSEPAPayment              Path = "/ics/v3/payments/sepa-credit"
+	PathSEPAScheduledPayment     Path = "/ics/v3/payments/sepa-scheduled-credit"
+	PathGetPaymentByID           Path = "/ics/v3/payments/%s/%s"
+	PathAuthorizePayment         Path = "/ics/v3/payments/%s/%s/authorize"
+	PathCompletePayment          Path = "/ics/v3/payments/%s/%s/complete"
+)
+
+type PathName string
+
+const (
+	PathNameTokenRequest             PathName = "TokenRequest"
+	PathNameTokenRefresh             PathName = "TokenRefresh"
+	PathNameGetSupportedBanks        PathName = "GetSupportedBanks"
+	PathNameGetSupportedBankByID     PathName = "GetSupportedBankByID"
+	PathNameCreateSession            PathName = "CreateSession"
+	PathNameGetSessionStatus         PathName = "GetSessionStatus"
+	PathNameDeleteSession            PathName = "DeleteSession"
+	PathNameGetConsent               PathName = "GetConsent"
+	PathNameGetAccounts              PathName = "GetAccounts"
+	PathNameGetAccountByID           PathName = "GetAccountByID"
+	PathNameGetBalancesByID          PathName = "GetBalancesByID"
+	PathNameGetTransactionsByID      PathName = "GetTransactionsByID"
+	PathNameDomesticPayment          PathName = "DomesticPayment"
+	PathNameDomesticScheduledPayment PathName = "DomesticScheduledPayment"
+	PathNameSEPAPayment              PathName = "SEPAPayment"
+	PathNameSEPAScheduledPayment     PathName = "SEPAScheduledPayment"
+	PathNameGetPaymentByID           PathName = "GetPaymentByID"
+	PathNameAuthorizePayment         PathName = "AuthorizePayment"
+	PathNameCompletePayment          PathName = "CompletePayment"
+)
+
 type Endpoint string
 
 var (
