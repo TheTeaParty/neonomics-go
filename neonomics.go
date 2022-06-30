@@ -2,7 +2,12 @@ package neonomics
 
 import (
 	"context"
+	"errors"
 	"time"
+)
+
+var (
+	ErrUnexpectedError = errors.New("unexpected error")
 )
 
 type Path string

@@ -3,7 +3,10 @@ package neonomics
 import (
 	"bytes"
 	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 )
 
@@ -32,11 +35,22 @@ func (c *client) doRequest(ctx context.Context, path Path, method string,
 
 	defer rsp.Body.Close()
 
-	if rsp.StatusCode >= 400 {
-
+	body, err := ioutil.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, nil
+	if rsp.StatusCode >= 400 {
+		var errResponse ErrorResponse
+		err := json.Unmarshal(body, &errResponse)
+		if err != nil {
+			return nil, ErrUnexpectedError
+		}
+
+		return nil, errors.New(errResponse.Message)
+	}
+
+	return body, nil
 }
 
 func New(config *Config, backend *Backend) API {
