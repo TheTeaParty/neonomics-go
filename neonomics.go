@@ -6,15 +6,28 @@ import (
 	"time"
 )
 
+const (
+	CtxKeyDeviceID = "x-device-id"
+)
+
 var (
 	ErrUnexpectedError = errors.New("unexpected error")
+	ErrMissingCtxKey   = errors.New("missing required context key")
+)
+
+type Environment string
+
+const (
+	EnvironmentProduction Environment = "production"
+	EnvironmentSandbox    Environment = "sandbox"
+	EnvironmentTest       Environment = "test"
 )
 
 type Path string
 
 const (
-	PathTokenRequest             Path = "/auth/realms/live/protocol/openid-connect/token"
-	PathTokenRefresh             Path = "/auth/realms/live/protocol/openid-connect/token"
+	PathTokenRequest             Path = "/auth/realms/%s/protocol/openid-connect/token"
+	PathTokenRefresh             Path = "/auth/realms/%s/protocol/openid-connect/token"
 	PathGetSupportedBanks        Path = "/ics/v3/banks"
 	PathGetSupportedBankByID     Path = "/ics/v3/banks/%s"
 	PathCreateSession            Path = "/ics/v3/session"
@@ -66,8 +79,8 @@ var (
 )
 
 type API interface {
-	TokenRequest(ctx context.Context, req *TokenRequestRequest) (*TokenRequestResponse, error)
-	TokenRefresh(ctx context.Context, req *TokenRefreshRequest) (*TokenRefreshResponse, error)
+	TokenRequest(ctx context.Context) (*TokenResponse, error)
+	TokenRefresh(ctx context.Context) (*TokenResponse, error)
 	GetSupportedBanks(ctx context.Context) ([]*GetSupportedBanksResponse, error)
 	GetSupportedBankByID(ctx context.Context, ID string) (*GetSupportedBanksResponse, error)
 	CreateSession(ctx context.Context, req *CreateSessionRequest) (*CreateSessionResponse, error)
@@ -424,10 +437,10 @@ type TokenRequestRequest struct {
 	ClientSecret string `json:"client_secret"`
 }
 
-type TokenRequestResponse struct {
+type TokenResponse struct {
 	AccessToken      string `json:"access_token"`
-	ExpiresIn        string `json:"expires_in"`
-	RefreshExpiresIn string `json:"refresh_expires_in"`
+	ExpiresIn        int64  `json:"expires_in"`
+	RefreshExpiresIn int64  `json:"refresh_expires_in"`
 	RefreshToken     string `json:"refresh_token"`
 	TokenType        string `json:"token_type"`
 	SessionState     string `json:"session_state"`
@@ -438,13 +451,4 @@ type TokenRefreshRequest struct {
 	RefreshToken string `json:"refresh_token"`
 	ClientId     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
-}
-
-type TokenRefreshResponse struct {
-	AccessToken      string `json:"access_token"`
-	ExpiresIn        string `json:"expires_in"`
-	RefreshExpiresIn string `json:"refresh_expires_in"`
-	RefreshToken     string `json:"refresh_token"`
-	TokenType        string `json:"token_type"`
-	SessionState     string `json:"session_state"`
 }

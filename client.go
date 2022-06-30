@@ -1,11 +1,11 @@
 package neonomics
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 )
@@ -13,13 +13,16 @@ import (
 type client struct {
 	config  *Config
 	backend *Backend
+
+	tokenResponse *TokenResponse
 }
 
-func (c *client) doRequest(ctx context.Context, path Path, method string,
-	headers map[string]string, requestBody []byte) ([]byte, error) {
+func (c *client) doRequest(ctx context.Context, path string, method string,
+	headers map[string]string, requestBody io.Reader) ([]byte, error) {
 
-	req, err := http.NewRequestWithContext(ctx, method,
-		fmt.Sprintf("%s%s", c.backend.Endpoint, path), bytes.NewReader(requestBody))
+	reqURL := fmt.Sprintf("%s%s", c.backend.Endpoint, path)
+
+	req, err := http.NewRequestWithContext(ctx, method, reqURL, requestBody)
 	if err != nil {
 		return nil, err
 	}
@@ -62,8 +65,9 @@ func New(config *Config, backend *Backend) API {
 
 func NewProduction(config *Config) API {
 	backend := &Backend{
-		Endpoint:   EndpointProduction,
-		HttpClient: &http.Client{},
+		Endpoint:    EndpointProduction,
+		HttpClient:  &http.Client{},
+		Environment: EnvironmentProduction,
 	}
 
 	return New(config, backend)
@@ -71,8 +75,9 @@ func NewProduction(config *Config) API {
 
 func NewSandbox(config *Config) API {
 	backend := &Backend{
-		Endpoint:   EndpointSandbox,
-		HttpClient: &http.Client{},
+		Endpoint:    EndpointSandbox,
+		HttpClient:  &http.Client{},
+		Environment: EnvironmentSandbox,
 	}
 
 	return New(config, backend)
