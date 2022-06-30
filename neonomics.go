@@ -34,6 +34,23 @@ type API interface {
 	CompletePayment(ctx context.Context, paymentProduct, paymentId string) (*CompletePaymentResponse, error)
 }
 
+type ErrorResponse struct {
+	Id        string `json:"id"`
+	ErrorCode string `json:"errorCode"`
+	Message   string `json:"message"`
+	Source    string `json:"source"`
+	Type      string `json:"type"`
+	Timestamp int64  `json:"timestamp"`
+	Links     []struct {
+		Type string `json:"type"`
+		Rel  string `json:"rel"`
+		Href string `json:"href"`
+		Meta struct {
+			Id string `json:"id"`
+		} `json:"meta"`
+	} `json:"links"`
+}
+
 type CompletePaymentResponse struct {
 	PaymentId        string    `json:"paymentId"`
 	Status           string    `json:"status"`
