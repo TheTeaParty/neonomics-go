@@ -10,6 +10,7 @@ type Config struct {
 }
 
 type Backend struct {
-	Endpoint   Endpoint
-	HttpClient *http.Client
+	Endpoint    Endpoint
+	Environment Environment
+	HttpClient  *http.Client
 }
