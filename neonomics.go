@@ -7,7 +7,10 @@ import (
 )
 
 const (
-	CtxKeyDeviceID = "x-device-id"
+	CtxKeyDeviceID     = "x-device-id"
+	CtxKeyPSUID        = "x-psu-id"
+	CtxKeyPSUIPAddress = "x-psu-ip-address"
+	CtxKeyRedirectURL  = "x-redirect-url"
 )
 
 var (
