@@ -39,6 +39,7 @@ func (c *client) GetSupportedBanks(ctx context.Context) ([]*GetSupportedBanksRes
 }
 
 func (c *client) GetSupportedBankByID(ctx context.Context, ID string) (*GetSupportedBanksResponse, error) {
+
 	_, err := c.TokenRequest(ctx)
 	if err != nil {
 		return nil, err
